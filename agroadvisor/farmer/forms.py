@@ -18,15 +18,17 @@ class RecommendationForm(FlaskForm):
     ph = FloatField('Soil pH', 
                     validators=[DataRequired(), NumberRange(min=0, max=14)], 
                     default=6.5)
-    rainfall = FloatField('Annual Rainfall (mm)', 
-                          validators=[DataRequired(), NumberRange(min=100, max=5000)], 
-                          default=1000.0)
-    temperature = FloatField('Average Temperature (°C)', 
-                             validators=[DataRequired(), NumberRange(min=-10, max=50)], 
-                             default=25.0)
-    humidity = FloatField('Average Humidity (%)', 
-                          validators=[DataRequired(), NumberRange(min=0, max=100)], 
-                          default=60.0)
+    
+    # --- MODIFICATION: Removed manual climate fields ---
+    # rainfall = FloatField('Annual Rainfall (mm)', 
+    #                       validators=[DataRequired(), NumberRange(min=100, max=5000)], 
+    #                       default=1000.0)
+    # temperature = FloatField('Average Temperature (°C)', 
+    #                          validators=[DataRequired(), NumberRange(min=-10, max=50)], 
+    #                          default=25.0)
+    # humidity = FloatField('Average Humidity (%)', 
+    #                       validators=[DataRequired(), NumberRange(min=0, max=100)], 
+    #                       default=60.0)
     
     district = StringField('District', 
                            validators=[DataRequired()], 

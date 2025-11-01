@@ -47,7 +47,11 @@ def geocode_market(market_name: str, district: str, state: str, session: request
         return cache[key]["lat"], cache[key]["lon"]
     
     log(f"[Geocode] Cache MISS for {key}. Querying API...")
+    # Use "India" as a fallback state to help geocoder
+    if not state:
+        state = "India"
     query = f"{market_name}, {district}, {state}"
+    
     try:
         res = session.get(GEOCODER_API, params={"q": query}, timeout=10)
         res.raise_for_status()
@@ -72,10 +76,22 @@ def geocode_market(market_name: str, district: str, state: str, session: request
 
 def get_weather_data(lat: float, lon: float, start_date: str, end_date: str, is_forecast: bool, session: requests.Session) -> Optional[Dict]:
     url = OPEN_METEO_FORECAST if is_forecast else OPEN_METEO_ARCHIVE
+    
+    # --- MODIFICATION: Added 'relativehumidity_2m_mean' ---
+    daily_params = [
+        "weathercode",
+        "temperature_2m_max",
+        "temperature_2m_min",
+        "precipitation_sum",
+        "relative_humidity_2m_max",
+        "relative_humidity_2m_min"
+    ]
+
+    
     params = {
         "latitude": lat,
         "longitude": lon,
-        "daily": "weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum",
+        "daily": ",".join(daily_params),
         "timezone": "auto"
     }
     
@@ -96,11 +112,16 @@ def get_weather_data(lat: float, lon: float, start_date: str, end_date: str, is_
             
         weather_dict = {}
         for i, date_str in enumerate(data["daily"]["time"]):
+            
+            # --- MODIFICATION: Parse humidity from response ---
+            humidity = data["daily"].get("relativehumidity_2m_mean", [None]*len(data["daily"]["time"]))[i]
+            
             weather_dict[date_str] = {
                 "temp_max": data["daily"]["temperature_2m_max"][i],
                 "temp_min": data["daily"]["temperature_2m_min"][i],
                 "precip": data["daily"]["precipitation_sum"][i],
-                "wmo": data["daily"]["weathercode"][i]
+                "wmo": data["daily"]["weathercode"][i],
+                "humidity": humidity # Added humidity
             }
         log(f"[Weather] Fetched {len(weather_dict)} days of data for {lat},{lon}")
         return weather_dict
@@ -154,6 +175,8 @@ def preprocess_data(df: pd.DataFrame, weather_data: Dict) -> Optional[pd.DataFra
             "precip", "doy", "month", "year", "dow"
         ]
         
+        # Note: 'humidity' is not in final_cols, as this function is for price
+        # prediction, which didn't use it. This is fine.
         merged = merged.dropna(subset=[col for col in final_cols if col not in ["arrivals_tonnes"]])
         log(f"[Preprocess] Merged with weather, final shape: {merged.shape}")
         return merged[final_cols]
@@ -271,6 +294,8 @@ def run_price_prediction(crop_name: str, district_name: str, session: requests.S
         return None
 
     future_date = datetime.now() + timedelta(days=PREDICTION_FUTURE_DAYS)
+    
+    # Use the latest *forecast* date available
     latest_forecast_date_str = sorted(future_weather_data.keys())[-1]
     weather_for_future = future_weather_data[latest_forecast_date_str]
     log(f"[Forecast] Using weather from {latest_forecast_date_str} for future date {future_date.date()}")

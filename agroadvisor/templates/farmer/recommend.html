@@ -40,18 +40,7 @@
                         <h4 class="mb-0">Climate & Location Data</h4>
                     </div>
                     <div class="card-body">
-                        <div class="mb-3">
-                            {{ form.rainfall.label(class="form-label") }}
-                            {{ form.rainfall(class="form-control" + (" is-invalid" if form.rainfall.errors else "")) }}
-                        </div>
-                        <div class="mb-3">
-                            {{ form.temperature.label(class="form-label") }}
-                            {{ form.temperature(class="form-control" + (" is-invalid" if form.temperature.errors else "")) }}
-                        </div>
-                        <div class="mb-3">
-                            {{ form.humidity.label(class="form-label") }}
-                            {{ form.humidity(class="form-control" + (" is-invalid" if form.humidity.errors else "")) }}
-                        </div>
+                        
                         <div class="mb-3">
                             {{ form.district.label(class="form-label") }}
                             {{ form.district(class="form-select" + (" is-invalid" if form.district.errors else "")) }}
