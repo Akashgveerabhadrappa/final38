@@ -16,6 +16,6 @@ class Config:
     # We use a simple SQLite database for development
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'instance', 'app.db')
-    
+    DATA_DIR = os.path.join(basedir, 'data')
     # This disables an unneeded feature, saving resources
     SQLALCHEMY_TRACK_MODIFICATIONS = False

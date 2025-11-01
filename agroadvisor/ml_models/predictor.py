@@ -47,11 +47,7 @@ def geocode_market(market_name: str, district: str, state: str, session: request
         return cache[key]["lat"], cache[key]["lon"]
     
     log(f"[Geocode] Cache MISS for {key}. Querying API...")
-    # Use "India" as a fallback state to help geocoder
-    if not state:
-        state = "India"
     query = f"{market_name}, {district}, {state}"
-    
     try:
         res = session.get(GEOCODER_API, params={"q": query}, timeout=10)
         res.raise_for_status()
@@ -76,22 +72,10 @@ def geocode_market(market_name: str, district: str, state: str, session: request
 
 def get_weather_data(lat: float, lon: float, start_date: str, end_date: str, is_forecast: bool, session: requests.Session) -> Optional[Dict]:
     url = OPEN_METEO_FORECAST if is_forecast else OPEN_METEO_ARCHIVE
-    
-    # --- MODIFICATION: Added 'relativehumidity_2m_mean' ---
-    daily_params = [
-        "weathercode",
-        "temperature_2m_max",
-        "temperature_2m_min",
-        "precipitation_sum",
-        "relative_humidity_2m_max",
-        "relative_humidity_2m_min"
-    ]
-
-    
     params = {
         "latitude": lat,
         "longitude": lon,
-        "daily": ",".join(daily_params),
+        "daily": "weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum",
         "timezone": "auto"
     }
     
@@ -112,16 +96,11 @@ def get_weather_data(lat: float, lon: float, start_date: str, end_date: str, is_
             
         weather_dict = {}
         for i, date_str in enumerate(data["daily"]["time"]):
-            
-            # --- MODIFICATION: Parse humidity from response ---
-            humidity = data["daily"].get("relativehumidity_2m_mean", [None]*len(data["daily"]["time"]))[i]
-            
             weather_dict[date_str] = {
                 "temp_max": data["daily"]["temperature_2m_max"][i],
                 "temp_min": data["daily"]["temperature_2m_min"][i],
                 "precip": data["daily"]["precipitation_sum"][i],
-                "wmo": data["daily"]["weathercode"][i],
-                "humidity": humidity # Added humidity
+                "wmo": data["daily"]["weathercode"][i]
             }
         log(f"[Weather] Fetched {len(weather_dict)} days of data for {lat},{lon}")
         return weather_dict
@@ -130,10 +109,11 @@ def get_weather_data(lat: float, lon: float, start_date: str, end_date: str, is_
         log_exception(f"[Weather] API query failed for {lat},{lon}", e)
         return None
 
-# --- 2. Model Training & Prediction (Copied from your file) ---
+# --- 2. Model Training & Prediction ---
 
 def preprocess_data(df: pd.DataFrame, weather_data: Dict) -> Optional[pd.DataFrame]:
     try:
+        # Rename the column to 'modal_price' (lowercase)
         df = df.rename(columns={
             "Reported Date": "date",
             "Modal Price (Rs./Quintal)": "modal_price",
@@ -170,26 +150,27 @@ def preprocess_data(df: pd.DataFrame, weather_data: Dict) -> Optional[pd.DataFra
         merged["dow"] = merged["date"].dt.weekday
         merged["arrivals_tonnes"] = merged["arrivals_tonnes"].fillna(0)
         
+        # The 'final_cols' list must use 'modal_price' (lowercase)
         final_cols = [
             "date", "modal_price", "arrivals_tonnes", "temp_max", "temp_min", 
             "precip", "doy", "month", "year", "dow"
         ]
         
-        # Note: 'humidity' is not in final_cols, as this function is for price
-        # prediction, which didn't use it. This is fine.
         merged = merged.dropna(subset=[col for col in final_cols if col not in ["arrivals_tonnes"]])
         log(f"[Preprocess] Merged with weather, final shape: {merged.shape}")
-        return merged[final_cols]
+        
+        # Return only the columns in final_cols
+        return merged[final_cols] 
         
     except Exception as e:
-        log_exception("[Preprocess] Failed", e)
+        log_exception(f"[Preprocess] Failed: {e}", e)
         return None
 
 def train_model(df: pd.DataFrame) -> Tuple[Optional[object], Dict]:
     metrics = {"r2_score": 0.0, "train_rows": 0}
     try:
         features = ["arrivals_tonnes", "temp_max", "temp_min", "precip", "doy", "month", "year", "dow"]
-        target = "modal_price"
+        target = "modal_price" # Use the lowercase version
         
         X = df[features]
         y = df[target]
@@ -252,7 +233,11 @@ def run_price_prediction(crop_name: str, district_name: str, session: requests.S
         log_exception(f"[Data] Failed to read {csv_file}", e)
         return None
 
-    district_df = raw_df[raw_df["District Name"].str.strip().str.lower() == district_name.strip().lower()].copy()
+    # --- THIS IS THE FIX for AttributeError ---
+    # We convert the 'District Name' column to string, fill NaNs, and then compare
+    district_series = raw_df["District Name"].astype(str).fillna('').str.strip().str.lower()
+    district_df = raw_df[district_series == district_name.strip().lower()].copy()
+    # --- END OF FIX ---
     
     if district_df.empty:
         log(f"[Data] No data found for district '{district_name}' in '{csv_file}'.")
@@ -294,8 +279,6 @@ def run_price_prediction(crop_name: str, district_name: str, session: requests.S
         return None
 
     future_date = datetime.now() + timedelta(days=PREDICTION_FUTURE_DAYS)
-    
-    # Use the latest *forecast* date available
     latest_forecast_date_str = sorted(future_weather_data.keys())[-1]
     weather_for_future = future_weather_data[latest_forecast_date_str]
     log(f"[Forecast] Using weather from {latest_forecast_date_str} for future date {future_date.date()}")
@@ -306,9 +289,30 @@ def run_price_prediction(crop_name: str, district_name: str, session: requests.S
     if predicted_price is None:
         return None
 
+    # --- THIS IS THE FIX for NameError ---
+    # 1. Create the historical_df
+    # We select only the 'date' and 'modal_price' columns
+    historical_df = processed_df[['date', 'modal_price']].copy()
+
+    # 2. Create the forecast_df
+    # We add the last known historical point to connect the line
+    last_historical_point = historical_df.iloc[[-1]].copy()
+    last_historical_point['predicted_price'] = np.nan
+
+    forecast_point = pd.DataFrame({
+        'date': [future_date],
+        'modal_price': [np.nan],
+        'predicted_price': [predicted_price]
+    })
+    
+    forecast_df = pd.concat([last_historical_point, forecast_point], ignore_index=True)
+
+    
     return {
         "predicted_price": round(predicted_price, 2),
         "market": target_market,
         "prediction_date": future_date.strftime("%Y-%m-%d"),
-        "model_r2": round(metrics["r2_score"], 4)
+        "model_r2": round(metrics["r2_score"], 4),
+        'historical_df': historical_df,  # <-- Now this variable exists
+        'forecast_df': forecast_df       # <-- Now this variable exists
     }

@@ -1,10 +1,10 @@
 {% extends "farmer/dashboard_base.html" %}
 
 {% block dashboard_content %}
-    <h1 class="display-5 fw-bold">Predict Crop Price</h1>
-    <p class="fs-4 text-muted">Select a crop and your district to get a 90-day price forecast.</p>
+    <h1 class="display-5 fw-bold text-center">Predict Crop Price</h1>
+    <p class="fs-4 text-muted text-center">Select a crop and your district to get a 90-day price forecast.</p>
 
-    <div class="card shadow-sm border-0" style="max-width: 600px;">
+    <div class="card shadow-sm border-0 mx-auto" style="max-width: 600px;">
         <div class="card-body p-4">
             <form method="POST" action="" novalidate>
                 {{ form.hidden_tag() }}
@@ -33,11 +33,11 @@
     </div>
 
     {% if result %}
-        <div class_ ="results-container mt-5">
-            <h2 class="display-6 fw-bold">Prediction Result</h2>
-            <p class="fs-5 text-muted">Based on historical data for <strong>{{ result.district_name }}</strong>.</p>
+        <div class="results-container mt-5">
+            <h2 class="display-6 fw-bold text-center">Prediction Result</h2>
+            <p class="fs-5 text-muted text-center">Based on historical data for <strong>{{ result.district_name }}</strong>.</p>
             
-            <div class="card shadow-sm mx-auto border-0" style="max-width: 500px;">
+            <div class="card shadow-sm mx-auto border-0 mb-4" style="max-width: 500px;">
                 <div class="card-header bg-success text-white">
                     <h3 class="h5 mb-0">{{ result.crop_name }}</h3>
                 </div>
@@ -65,7 +65,136 @@
                     </li>
                 </ul>
             </div>
+
+            {% if historical_data and forecast_data %}
+            <div class="card shadow-sm border-0 mx-auto" style="max-width: 800px;">
+                <div class="card-header bg-light">
+                    <h4 class="mb-0">Price Forecast: {{ result.crop_name }} in {{ result.district_name }}</h4>
+                </div>
+                <div class="card-body">
+                    <canvas id="priceChart" style="height: 400px;"></canvas>
+                </div>
+            </div>
+            {% endif %}
+
         </div>
     {% endif %}
 
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        
+        // 1. Get the data from Flask (if it exists)
+        const historicalData = {{ historical_data | safe or 'null' }};
+        const forecastData = {{ forecast_data | safe or 'null' }};
+
+        // 2. Check if we have data to plot
+        if (historicalData && forecastData) {
+            
+            // 3. Prepare the data for Chart.js
+            
+            // --- DATA FOR BLUE LINE (HISTORICAL) ---
+            const historicalLabels = historicalData.map(d => d.date);
+            const historicalPrices = historicalData.map(d => d.modal_price);
+
+            // --- DATA FOR GREEN LINE (FORECAST) ---
+            // 'forecastData' is a 2-point array:
+            // [0] = { date: "...", modal_price: 12345, predicted_price: null }
+            // [1] = { date: "...", modal_price: null, predicted_price: 50000 }
+            
+            // Get the price from the *first* point
+            const lastHistoricalPrice = forecastData[0].modal_price;
+            // Get the price from the *second* point
+            const newPredictedPrice = forecastData[1].predicted_price;
+            // Get the date from the *second* point
+            const newPredictedDate = forecastData[1].date;
+            
+            // --- COMBINE LABELS ---
+            const allLabels = [...historicalLabels];
+            // Add the new forecast date if it's not already in the list
+            if (!allLabels.includes(newPredictedDate)) {
+                allLabels.push(newPredictedDate);
+            }
+
+            // --- BUILD DATASETS WITH NULL PADDING ---
+            
+            // Create the historical data array. It needs a 'null' at the end 
+            // so it doesn't try to connect to the forecast point.
+            const historicalChartData = [...historicalPrices, null];
+            
+            // Create the forecast data array. It's all 'null' until the end.
+            const forecastChartData = new Array(historicalPrices.length - 1).fill(null);
+            // Add the two points for the forecast line
+            forecastChartData.push(lastHistoricalPrice); // Last historical price
+            forecastChartData.push(newPredictedPrice); // New predicted price
+
+            // 4. Get the canvas
+            const ctx = document.getElementById('priceChart').getContext('2d');
+
+            // 5. Create the chart
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: allLabels,
+                    datasets: [
+                        {
+                            label: 'Historical Price',
+                            data: historicalChartData, // Use the padded data
+                            borderColor: 'rgba(54, 162, 235, 1)', // Blue
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderWidth: 2,
+                            spanGaps: false, // Do not connect over nulls
+                            pointRadius: 1, // Small dots
+                            pointHitRadius: 10,
+                        },
+                        {
+                            label: 'Forecasted Price',
+                            data: forecastChartData, // Use the padded data
+                            borderColor: 'rgba(42, 157, 143, 1)', // Your green
+                            backgroundColor: 'rgba(42, 157, 143, 0.2)',
+                            borderWidth: 3,
+                            borderDash: [5, 5], // Make it a dashed line
+                            spanGaps: false, // Do not connect over nulls
+                            pointRadius: 1,
+                            pointHitRadius: 10,
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, // Allows chart to fit container
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Price History & 90-Day Forecast'
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        },
+                        y: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Price (Rs. / Quintal)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    });
+</script>
 {% endblock %}

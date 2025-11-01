@@ -295,3 +295,63 @@ body.login-page {
 .navbar-custom .navbar-brand {
     color: #fff;
 }
+
+/* =========================
+   FAQ Section Styles
+============================== */
+
+.faq-accordion-custom .accordion-item {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    overflow: hidden; /* Ensures border-radius is respected */
+}
+
+.faq-accordion-custom .accordion-header {
+    margin: 0;
+}
+
+.faq-accordion-custom .accordion-button {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    background-color: #fff;
+    padding: 1.25rem 1.5rem;
+    text-decoration: none;
+    box-shadow: none; /* Removes Bootstrap's default inner shadow */
+}
+
+.faq-accordion-custom .accordion-button:not(.collapsed) {
+    color: var(--primary-color); /* Uses your green from .navbar-custom */
+    background-color: #f1f8ee;
+    box-shadow: none;
+}
+
+.faq-accordion-custom .accordion-body {
+    padding: 0 1.5rem 1.25rem 1.5rem;
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.6;
+}
+
+/* Custom Icons (+/-) */
+.faq-accordion-custom .accordion-button::after {
+    /* Use a custom icon (+ sign) */
+    content: '\002B'; /* This is the '+' symbol */
+    font-family: 'bootstrap-icons'; /* Or any icon font */
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    background-image: none; /* Remove default Bootstrap icon */
+    transform: scale(1.2);
+    transition: transform 0.2s ease-in-out;
+}
+
+.faq-accordion-custom .accordion-button:not(.collapsed)::after {
+    /* Change icon to - sign when open */
+    content: '\2212'; /* This is the '−' symbol */
+    background-image: none; /* Remove default Bootstrap icon */
+    transform: scale(1.2);
+}
