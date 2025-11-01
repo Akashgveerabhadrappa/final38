@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block body_class %}dashboard-page{% endblock %}
+
+{% block content %}
+<div class="dashboard-page-container">
+    <div class="dashboard-layout" id="dashboardLayout">
+        
+        <nav class="admin-sidebar d-flex flex-column">
+            
+            <div class="nav flex-column nav-pills">
+                <a class="nav-link {% if request.endpoint == 'admin.dashboard' %}active{% endif %}" href="{{ url_for('admin.dashboard') }}">
+                    <i class="bi bi-people-fill"></i>
+                    <span>Manage Users</span>
+                </a>
+                </div>
+
+            <div class="sidebar-footer">
+                <a class="nav-link" href="#"> <i class="bi bi-person-circle"></i>
+                    <span>{{ current_user.username }}</span>
+                </a>
+                <a class="nav-link" href="{{ url_for('auth.logout') }}">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </nav>
+
+        <main class="dashboard-content">
+            {% block admin_content %}{% endblock %}
+        </main>
+
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var toggleBtn = document.getElementById("sidebarToggleBtn");
+        var layout = document.getElementById("dashboardLayout");
+
+        if (toggleBtn && layout) {
+            toggleBtn.addEventListener("click", function() {
+                layout.classList.toggle("sidebar-collapsed");
+            });
+        }
+    });
+</script>
+
+{% endblock %}

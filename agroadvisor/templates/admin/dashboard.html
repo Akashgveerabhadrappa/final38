@@ -1,0 +1,60 @@
+{% extends "admin/admin_base.html" %}
+
+{% block admin_content %}
+    
+    <div class="pb-3 mb-4 border-bottom">
+        <h1 class="display-5 fw-bold">Admin Dashboard</h1>
+        <p class="fs-4 text-muted">Manage users and site settings.</p>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-light">
+            <h4 class="mb-0">All Users</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">User ID</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Role</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>
+                                {% if user.is_admin() %}
+                                    <span class="badge bg-danger">Admin</span>
+                                {% else %}
+                                    <span class="badge bg-success">Farmer</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if user.id != current_user.id %}
+                                    <form action="{{ url_for('admin.delete_user', user_id=user.id) }}" method="POST"
+                                          onsubmit="return confirm('Are you sure you want to delete this user? This is permanent.');">
+                                        
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="bi bi-trash-fill"></i> Delete
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <span class="badge bg-secondary">You</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

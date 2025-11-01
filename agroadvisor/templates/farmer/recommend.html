@@ -1,0 +1,124 @@
+{% extends "farmer/dashboard_base.html" %}
+
+{% block dashboard_content %}
+    <h1 class="display-5 fw-bold">Get Your Recommendation</h1>
+    <p class="fs-4 text-muted">Fill in your farm's data to get personalized crop and price predictions.</p>
+
+    <form method="POST" action="" novalidate class="mt-4">
+        {{ form.hidden_tag() }}
+
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-header bg-light">
+                        <h4 class="mb-0">Soil & Nutrient Data</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            {{ form.nitrogen.label(class="form-label") }}
+                            {{ form.nitrogen(class="form-control" + (" is-invalid" if form.nitrogen.errors else "")) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.phosphorous.label(class="form-label") }}
+                            {{ form.phosphorous(class="form-control" + (" is-invalid" if form.phosphorous.errors else "")) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.potassium.label(class="form-label") }}
+                            {{ form.potassium(class="form-control" + (" is-invalid" if form.potassium.errors else "")) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.ph.label(class="form-label") }}
+                            {{ form.ph(class="form-control" + (" is-invalid" if form.ph.errors else "")) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-header bg-light">
+                        <h4 class="mb-0">Climate & Location Data</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            {{ form.rainfall.label(class="form-label") }}
+                            {{ form.rainfall(class="form-control" + (" is-invalid" if form.rainfall.errors else "")) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.temperature.label(class="form-label") }}
+                            {{ form.temperature(class="form-control" + (" is-invalid" if form.temperature.errors else "")) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.humidity.label(class="form-label") }}
+                            {{ form.humidity(class="form-control" + (" is-invalid" if form.humidity.errors else "")) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.district.label(class="form-label") }}
+                            {{ form.district(class="form-select" + (" is-invalid" if form.district.errors else "")) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.season.label(class="form-label") }}
+                            {{ form.season(class="form-select" + (" is-invalid" if form.season.errors else "")) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-grid my-4">
+            {{ form.submit(class="btn btn-success btn-lg") }}
+        </div>
+    </form>
+
+    {% if results %}
+        <div class="results-container mt-5">
+            <h2 class="display-6 fw-bold">Your Top 5 Recommendations</h2>
+            <p class="fs-5 text-muted">Based on your inputs for <strong>{{ form.district.data }}, {{ form.season.data }}</strong> season.</p>
+            
+            <div class="row g-4 mt-3">
+                {% for crop in results %}
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card h-100 shadow-sm border-0">
+                            <div class="card-header bg-success text-white">
+                                <h3 class="h5 mb-0">{{ loop.index }}. {{ crop.Crop_Name }}</h3>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <strong>Final Score:</strong> 
+                                    <span class="badge bg-primary rounded-pill fs-6">{{ "%.2f"|format(crop.Final_Score * 100) }}%</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <strong>Predicted Price:</strong> 
+                                    <span>
+                                        {% if crop.predicted_price == 'N/A' %} N/A
+                                        {% elif crop.predicted_price == 'Error' %} Error
+                                        {% else %} Rs. {{ "%.2f"|format(crop.predicted_price) }} / Q
+                                        {% endif %}
+                                    </span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <strong>Suitability Score:</strong> 
+                                    <span>{{ "%.2f"|format(crop.Suitability * 100) }}%</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <strong>Yield Score:</strong> 
+                                    <span>{{ "%.2f"|format(crop.Predicted_Yield_Score * 100) }}%</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <strong>At Market:</strong> 
+                                    <span>{{ crop.market if crop.market else 'N/A' }}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% elif results == [] %}
+        <div class="alert alert-warning mt-5">
+             <h4 class="alert-heading">No Results</h4>
+             <p>No recommendations could be found for the data you provided. Please try adjusting your inputs.</p>
+        </div>
+    {% endif %}
+
+{% endblock %}

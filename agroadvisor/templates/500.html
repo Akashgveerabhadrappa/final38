@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <style>
+        .error-page {
+            text-align: center;
+            padding: 50px;
+        }
+        .error-page h1 {
+            font-size: 5rem;
+            color: #dc3545; /* Danger color */
+        }
+        .error-page p {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+        }
+        .error-page a {
+            font-weight: 600;
+        }
+    </style>
+    <div class="error-page">
+        <h1>500</h1>
+        <p>Internal Server Error. Something went wrong on our end.</p>
+        <p>Our team has been notified. Please try again later.</p>
+        <a href="{{ url_for('main.index') }}">Return to Homepage</a>
+    </div>
+{% endblock %}

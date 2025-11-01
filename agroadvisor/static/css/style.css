@@ -1,0 +1,297 @@
+/* Import Google Font */
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+/* --- Login Page Styles --- */
+
+body.login-page {
+    /* !! IMPORTANT !! */
+    /* Download a background image and save it as 'login-bg.jpg' */
+    background: url('/static/images/login-bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+    background-color: #f0f2f5; /* Fallback color */
+    
+    /* We hide the standard navbar and footer on the login page */
+}
+.login-page header,
+.login-page footer {
+    display: none;
+}
+.login-page .min-vh-100 {
+    min-height: 100vh !important;
+}
+
+
+/* The "Frosted Glass" Card */
+.login-form-container {
+    background: rgba(255, 255, 255, 0.9); /* 90% white background */
+    padding: 2.5rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Login Page Logo Style */
+.login-logo {
+    font-weight: 700;
+    font-size: 2.25rem;
+    color: #2a9d8f; /* A nice teal/green color */
+    margin-bottom: 0.5rem;
+}
+
+
+/* --- General Site Styles --- */
+
+/* This is for your *other* pages (index.html, etc.)
+  You will need to wrap their content in a div:
+  <div class="container main-content"> ... </div>
+*/
+.main-content {
+    padding: 2rem 0;
+}
+
+/* Fix for navbar covering content */
+body {
+    padding-top: 56px; /* Adjust this value if your navbar height changes */
+}
+/* We remove this padding for the full-screen login page */
+body.login-page {
+    padding-top: 0;
+}
+
+/* --- Homepage Hero Styles --- */
+
+.home-hero {
+    position: relative; /* Needed for the overlay */
+    background: url('/static/images/home-bg.jpg') no-repeat center center;
+    background-size: cover;
+    padding: 6rem 1.5rem !important; /* Add more padding for a bigger effect */
+}
+
+/* This adds the dark overlay */
+.home-hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* 50% black overlay */
+    border-radius: 0.5rem; /* Matches the .rounded-3 class */
+}
+
+/* This makes sure our text is on top of the overlay */
+.home-hero .container-fluid {
+    position: relative;
+    z-index: 2;
+}
+
+/* Change text color to white */
+.home-hero h1,
+.home-hero p {
+    color: #fff;
+}
+
+.home-hero p {
+    color: rgba(255, 255, 255, 0.85); /* Slightly transparent white */
+}
+/* --- Homepage Card Tweaks --- */
+.card.border-0 {
+    border: 0 !important; /* Removes the default card border */
+}
+
+
+/* --- Dashboard Sidebar Layout --- */
+
+/* This overrides the .container-xl padding on dashboard pages */
+.dashboard-page-container {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.dashboard-layout {
+    display: flex;
+    /* Full viewport height minus the navbar height (56px) */
+    min-height: calc(100vh - 56px); 
+}
+
+.dashboard-sidebar {
+    width: 280px; /* Fixed width for the sidebar */
+    flex-shrink: 0;
+    background-color: #f8f9fa; /* Light gray */
+    border-right: 1px solid #dee2e6;
+    padding: 1.5rem;
+}
+
+/* Sidebar navigation link styling */
+.dashboard-sidebar .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem; /* Space between icon and text */
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #343a40; /* Dark gray text */
+    border-radius: 0.375rem;
+    transition: all 0.2s;
+}
+
+.dashboard-sidebar .nav-link i {
+    font-size: 1.25rem;
+    width: 20px;
+    text-align: center;
+}
+
+/* Hover state */
+.dashboard-sidebar .nav-link:hover {
+    background-color: #e9ecef;
+    color: #000;
+}
+
+/* Active state (for the current page) */
+.dashboard-sidebar .nav-link.active {
+    background-color: #2a9d8f; /* Your theme's green */
+    color: #fff;
+}
+
+.dashboard-content {
+    flex-grow: 1; /* Takes up the remaining space */
+    padding: 2rem;
+    background-color: #fff;
+}
+
+/* --- Collapsible Sidebar Styles --- */
+
+/* Add transitions for smooth animation */
+.dashboard-sidebar {
+    transition: width 0.3s ease;
+}
+
+.dashboard-content {
+    transition: margin-left 0.3s ease;
+}
+
+/* Style for the sidebar when it's collapsed */
+.dashboard-layout.sidebar-collapsed .dashboard-sidebar {
+    width: 80px; /* New "mini-bar" width */
+    overflow: hidden;
+}
+
+/* Hide the text labels when collapsed */
+.dashboard-layout.sidebar-collapsed .dashboard-sidebar .nav-link span {
+    display: none;
+}
+
+/* Center the icons when collapsed */
+.dashboard-layout.sidebar-collapsed .dashboard-sidebar .nav-link {
+    justify-content: center;
+}
+
+/* --- Sidebar Profile/Logout Section --- */
+.sidebar-footer {
+    margin-top: auto; /* Pushes this to the bottom */
+    padding-top: 1rem;
+    border-top: 1px solid #dee2e6;
+}
+
+/* Hide profile text when collapsed */
+.dashboard-layout.sidebar-collapsed .sidebar-footer span {
+    display: none;
+}
+.dashboard-layout.sidebar-collapsed .sidebar-footer .nav-link {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* --- Admin Dashboard Sidebar Layout --- */
+
+/* We use the same 'dashboard-page' class to trigger the toggle button */
+.admin-sidebar {
+    width: 280px;
+    flex-shrink: 0;
+    /* Using the dark navbar color for the admin sidebar */
+    background-color: #264653; 
+    padding: 1.5rem;
+}
+
+/* Sidebar navigation link styling */
+.admin-sidebar .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #adb5bd; /* Light text on dark background */
+    border-radius: 0.375rem;
+    transition: all 0.2s;
+}
+
+.admin-sidebar .nav-link i {
+    font-size: 1.25rem;
+    width: 20px;
+    text-align: center;
+}
+
+/* Hover state */
+.admin-sidebar .nav-link:hover {
+    background-color: #344955; /* Slightly lighter dark */
+    color: #fff;
+}
+
+/* Active state (for the current page) */
+.admin-sidebar .nav-link.active {
+    background-color: #2a9d8f; /* Your theme's green */
+    color: #fff;
+}
+
+/* --- Admin Profile/Logout Section --- */
+.admin-sidebar .sidebar-footer {
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid #495057; /* Dark border */
+}
+
+/* Hide profile text when collapsed */
+.dashboard-layout.sidebar-collapsed .admin-sidebar .sidebar-footer span {
+    display: none;
+}
+.dashboard-layout.sidebar-collapsed .admin-sidebar .nav-link {
+    justify-content: center;
+}
+
+/* --- Enhanced Navbar Styles (Green Theme) --- */
+
+.navbar-custom {
+    /* The green color you've been using */
+    background-color: #198754;
+}
+
+/* Links are a slightly transparent white */
+.navbar-custom .nav-link {
+    color: rgba(255, 255, 255, 0.85);
+    transition: all 0.2s ease;
+    border-radius: 6px;
+}
+
+/* On hover, links become full white and slightly darker */
+.navbar-custom .nav-link:hover,
+.navbar-custom .nav-link:focus {
+    color: #fff;
+    background-color: #4a866a; /* A darker shade of the green */
+}
+
+/* The "Active" page link is full white, bold, and a bit darker */
+.navbar-custom .nav-link.active {
+    color: #fff;
+    background-color: #046d3c; /* An even darker shade */
+    font-weight: 700;
+}
+
+/* Make the brand name full white */
+.navbar-custom .navbar-brand {
+    color: #fff;
+}

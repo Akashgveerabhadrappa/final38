@@ -1,0 +1,64 @@
+{% extends "farmer/dashboard_base.html" %}
+
+{% block dashboard_content %}
+    
+    <div class="pb-3 mb-4 border-bottom">
+        <h1 class="display-5 fw-bold">List a New Product</h1>
+        <p class="fs-4 text-muted">Fill out the form below to add your product to the marketplace.</p>
+    </div>
+
+    <div class="card shadow-sm border-0" style="max-width: 800px;">
+        <div class="card-body p-4">
+            <form method="POST" action="" novalidate>
+                {{ form.hidden_tag() }}
+                
+                <div class="mb-3">
+                    {{ form.name.label(class="form-label") }}
+                    {{ form.name(class="form-control" + (" is-invalid" if form.name.errors else ""), placeholder="e.g., Fresh Organic Wheat") }}
+                    {% for error in form.name.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-6 mb-3">
+                        {{ form.price.label(class="form-label") }}
+                        {{ form.price(class="form-control" + (" is-invalid" if form.price.errors else ""), placeholder="Price in Rs.") }}
+                        {% for error in form.price.errors %}
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        {{ form.quantity.label(class="form-label") }}
+                        {{ form.quantity(class="form-control" + (" is-invalid" if form.quantity.errors else ""), placeholder="e.g., 1 Quintal, 50 Kg") }}
+                        {% for error in form.quantity.errors %}
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    {{ form.description.label(class="form-label") }}
+                    {{ form.description(class="form-control" + (" is-invalid" if form.description.errors else ""), rows="5", placeholder="Add details about your product...") }}
+                    {% for error in form.description.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.contact_phone.label(class="form-label") }}
+                    {{ form.contact_phone(class="form-control" + (" is-invalid" if form.contact_phone.errors else ""), placeholder="Enter a 10-digit number for buyers") }}
+                    <div class="form-text">This phone number will be shown to buyers.</div>
+                    {% for error in form.contact_phone.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="d-grid mt-4">
+                    {{ form.submit(class="btn btn-success btn-lg") }}
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

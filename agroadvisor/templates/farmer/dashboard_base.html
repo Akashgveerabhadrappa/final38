@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block body_class %}dashboard-page{% endblock %}
+
+
+{% block content %}
+<div class="dashboard-page-container">
+    <div class="dashboard-layout" id="dashboardLayout">
+        
+        <nav class="dashboard-sidebar d-flex flex-column">
+            
+            <div class="nav flex-column nav-pills">
+                <a class="nav-link {% if request.endpoint == 'farmer.dashboard' %}active{% endif %}" href="{{ url_for('farmer.dashboard') }}">
+                    <i class="bi bi-grid-fill"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a class="nav-link {% if request.endpoint == 'farmer.recommend' %}active{% endif %}" href="{{ url_for('farmer.recommend') }}">
+                    <i class="bi bi-cpu-fill"></i>
+                    <span>Get Recommendation</span>
+                </a>
+                <a class="nav-link {% if request.endpoint == 'farmer.predict' %}active{% endif %}" href="{{ url_for('farmer.predict') }}">
+                    <i class="bi bi-graph-up-arrow"></i>
+                    <span>Predict Price</span>
+                </a>
+                <a class="nav-link {% if request.endpoint == 'market.marketplace' %}active{% endif %}" href="{{ url_for('market.marketplace') }}">
+                    <i class="bi bi-shop"></i>
+                    <span>View Marketplace</span>
+                </a>
+                <a class="nav-link {% if request.endpoint == 'market.add_product' %}active{% endif %}" href="{{ url_for('market.add_product') }}">
+                    <i class="bi bi-tag-fill"></i>
+                    <span>Sell Your Produce</span>
+                </a>
+            </div>
+
+            <div class="sidebar-footer">
+                <a class="nav-link" href="#"> <i class="bi bi-person-circle"></i>
+                    <span>{{ current_user.username }}</span>
+                </a>
+                <a class="nav-link" href="{{ url_for('auth.logout') }}">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </nav>
+
+        <main class="dashboard-content">
+            {% block dashboard_content %}{% endblock %}
+        </main>
+
+    </div>
+</div>
+
+<script>
+    // Wait for the page to be fully loaded
+    document.addEventListener("DOMContentLoaded", function() {
+        // Find the button in the navbar
+        var toggleBtn = document.getElementById("sidebarToggleBtn");
+        
+        // Find the dashboard layout
+        var layout = document.getElementById("dashboardLayout");
+
+        // Add a click event listener to the button
+        if (toggleBtn && layout) {
+            toggleBtn.addEventListener("click", function() {
+                // Add or remove the 'sidebar-collapsed' class
+                layout.classList.toggle("sidebar-collapsed");
+            });
+        }
+    });
+</script>
+
+{% endblock %}

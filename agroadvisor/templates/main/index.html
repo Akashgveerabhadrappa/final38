@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-xl">
+    <div class="p-5 my-4 home-hero rounded-3 text-center shadow">
+        <div class="container-fluid py-3">
+            <h1 class="display-4 fw-bold text-white">Welcome to AgroAdvisor</h1>
+            <p class="fs-4">Smarter farming, bigger yields. Get AI-powered crop advice and sell on our marketplace.</p>
+            
+            {% if not current_user.is_authenticated %}
+                <a href="{{ url_for('auth.register') }}" class="btn btn-success btn-lg mt-3">Get Started Now</a>
+            {% else %}
+                 <a href="{{ url_for('farmer.dashboard') }}" class="btn btn-success btn-lg mt-3">Go to Your Dashboard</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="bg-light py-5">
+    <div class="container-xl">
+        <h2 class="text-center mb-5 display-6 fw-bold">Our Features</h2>
+        <div class="row g-4">
+
+            <div class="col-md-4">
+                <div class="card h-100 text-center shadow border-0">
+                    <div class="card-body p-4">
+                        <i class="bi bi-cpu-fill fs-1 text-success"></i>
+                        <h3 class="h4 mt-3">Intelligent Recommendations</h3>
+                        <p class="card-text text-muted">Get AI-driven crop recommendations based on your soil, climate, and local data.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 text-center shadow border-0">
+                    <div class="card-body p-4">
+                        <i class="bi bi-graph-up-arrow fs-1 text-success"></i>
+                        <h3 class="h4 mt-3">Price & Yield Prediction</h3>
+                        <p class="card-text text-muted">Forecast your crop's future price and potential yield to make better decisions.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 text-center shadow border-0">
+                    <div class="card-body p-4">
+                        <i class="bi bi-shop fs-1 text-success"></i>
+                        <h3 class="h4 mt-3">Farmer's Marketplace</h3>
+                        <p class="card-text text-muted">Sell your produce directly to buyers or browse listings from other farmers.</p>
+                    </div>
+                </div>
+            </div>
+        </div> </div> </div> <div class="container-xl py-5">
+    <h2 class="text-center mb-5 display-6 fw-bold">How It Works</h2>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 shadow border-0">
+                <div class="card-body p-4 text-center">
+                    <div class="p-3 mb-2 bg-success text-white rounded-circle d-inline-block">
+                        <i class="bi bi-person-plus-fill fs-2"></i>
+                    </div>
+                    <h4 class="card-title mt-2">1. Sign Up</h4>
+                    <p class="card-text text-muted">Create your free account in just a few minutes to get started.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 shadow border-0">
+                <div class="card-body p-4 text-center">
+                    <div class="p-3 mb-2 bg-success text-white rounded-circle d-inline-block">
+                        <i class="bi bi-search fs-2"></i>
+                    </div>
+                    <h4 class="card-title mt-2">2. Get Advice</h4>
+                    <p class="card-text text-muted">Use our AI tools to get recommendations and predictions.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 shadow border-0">
+                <div class="card-body p-4 text-center">
+                    <div class="p-3 mb-2 bg-success text-white rounded-circle d-inline-block">
+                        <i class="bi bi-bar-chart-fill fs-2"></i>
+                    </div>
+                    <h4 class="card-title mt-2">3. Sell & Grow</h4>
+                    <p class="card-text text-muted">Use the marketplace to sell your produce and grow your business.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="py-5" style="background-color: #264653;">
+    <div class="container-xl text-center text-white">
+        <i class="bi bi-check-circle-fill fs-1 text-success"></i>
+        <h2 class="display-5 fw-bold mt-3">Ready to transform your farm?</h2>
+        <p class="fs-4 text-white-50">Join the community of smart farmers today.</p>
+        <a href="{{ url_for('auth.register') }}" class="btn btn-success btn-lg mt-3">Get Started Now</a>
+    </div>
+</div>
+
+{% endblock %}

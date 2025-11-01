@@ -1,0 +1,56 @@
+{% extends "farmer/dashboard_base.html" %}
+
+{% block dashboard_content %}
+    
+    <div classs="pb-3 mb-4 border-bottom">
+        <h1 class="display-5 fw-bold">Welcome, {{ current_user.username }}!</h1>
+        <p class="fs-4 text-muted">This is your personal dashboard. What would you like to do?</p>
+    </div>
+
+    <div class="row g-4 mt-4">
+
+        <div class="col-md-6">
+            <div class="card h-100 shadow border-0">
+                <div class="card-body p-4 text-center">
+                    <i class="bi bi-cpu-fill fs-1 text-success"></i>
+                    <h2 class="h4 mt-3">Get Crop Recommendation</h2>
+                    <p class="card-text text-muted">Get AI-powered crop and price predictions based on your soil and climate.</p>
+                    <a href="{{ url_for('farmer.recommend') }}" class="btn btn-success stretched-link mt-2">Get Started</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card h-100 shadow border-0">
+                <div class="card-body p-4 text-center">
+                    <i class="bi bi-graph-up-arrow fs-1 text-success"></i>
+                    <h2 class="h4 mt-3">Predict Crop Price</h2>
+                    <p class="card-text text-muted">Get a standalone price forecast for a specific crop in your district.</p>
+                    <a href="{{ url_for('farmer.predict') }}" class="btn btn-success stretched-link mt-2">Predict Now</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card h-100 shadow border-0">
+                <div class="card-body p-4 text-center">
+                    <i class="bi bi-shop fs-1 text-success"></i>
+                    <h2 class="h4 mt-3">View Marketplace</h2>
+                    <p class="card-text text-muted">See what other farmers are selling or list your own produce.</p>
+                    <a href="{{ url_for('market.marketplace') }}" class="btn btn-success stretched-link mt-2">Browse Market</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card h-100 shadow border-0">
+                <div class="card-body p-4 text-center">
+                    <i class="bi bi-tag-fill fs-1 text-success"></i>
+                    <h2 class="h4 mt-3">Sell Your Produce</h2>
+                    <p class="card-text text-muted">Add a new product to the marketplace for others to buy.</p>
+                    <a href="{{ url_for('market.add_product') }}" class="btn btn-success stretched-link mt-2">Add Product</a>
+                </div>
+            </div>
+        </div>
+
+    </div> {% endblock %}

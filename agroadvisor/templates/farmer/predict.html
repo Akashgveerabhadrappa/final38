@@ -1,0 +1,71 @@
+{% extends "farmer/dashboard_base.html" %}
+
+{% block dashboard_content %}
+    <h1 class="display-5 fw-bold">Predict Crop Price</h1>
+    <p class="fs-4 text-muted">Select a crop and your district to get a 90-day price forecast.</p>
+
+    <div class="card shadow-sm border-0" style="max-width: 600px;">
+        <div class="card-body p-4">
+            <form method="POST" action="" novalidate>
+                {{ form.hidden_tag() }}
+                
+                <div class="mb-3">
+                    {{ form.crop.label(class="form-label") }}
+                    {{ form.crop(class="form-select" + (" is-invalid" if form.crop.errors else "")) }}
+                    {% for error in form.crop.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.district.label(class="form-label") }}
+                    {{ form.district(class="form-select" + (" is-invalid" if form.district.errors else "")) }}
+                    {% for error in form.district.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="d-grid mt-4">
+                    {{ form.submit(class="btn btn-success") }}
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if result %}
+        <div class_ ="results-container mt-5">
+            <h2 class="display-6 fw-bold">Prediction Result</h2>
+            <p class="fs-5 text-muted">Based on historical data for <strong>{{ result.district_name }}</strong>.</p>
+            
+            <div class="card shadow-sm mx-auto border-0" style="max-width: 500px;">
+                <div class="card-header bg-success text-white">
+                    <h3 class="h5 mb-0">{{ result.crop_name }}</h3>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <strong>Predicted Price:</strong> 
+                        <span class="fs-5 fw-bold text-success">
+                            {% if result.predicted_price == 'N/A' %} N/A
+                            {% elif result.predicted_price == 'Error' %} Error
+                            {% else %} Rs. {{ "%.2f"|format(result.predicted_price) }} / Q
+                            {% endif %}
+                        </span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <strong>For Date:</strong> 
+                        <span>{{ result.prediction_date }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <strong>At Market:</strong> 
+                        <span>{{ result.market }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <strong>Model Confidence (R2):</strong> 
+                        <span>{{ "%.2f"|format(result.model_r2 * 100) }}%</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}

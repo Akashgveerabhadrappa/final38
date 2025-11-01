@@ -1,0 +1,44 @@
+Crop,N_Min,N_Max,P_Min,P_Max,K_Min,K_Max,pH_Min,pH_Max,Rain_Min,Rain_Max,Temp_Min,Temp_Max,Humid_Min,Humid_Max,Soil Type,Notes
+Arhar/Tur,20.0,30.0,50.0,60.0,20.0,30.0,6.0,7.5,600.0,1000.0,25.0,35.0,50.0,60.0,Loamy to black soil,Drought-tolerant pulse crop
+Bajra,60.0,80.0,30.0,40.0,30.0,40.0,6.0,7.5,400.0,750.0,25.0,35.0,40.0,60.0,Sandy loam,Dryland crop suited for low rainfall
+Banana,200.0,250.0,50.0,60.0,200.0,300.0,6.0,7.5,1000.0,2500.0,20.0,35.0,70.0,90.0,Alluvial/loamy,Rich in organic matter and moisture
+Black Pepper,50.0,100.0,30.0,50.0,100.0,150.0,5.5,6.5,1500.0,2500.0,20.0,32.0,75.0,90.0,Loamy,Needs shaded & humid environment
+Cardamom,75.0,100.0,50.0,60.0,150.0,200.0,5.0,6.5,1500.0,2500.0,18.0,28.0,80.0,90.0,Forest loam,Thrives under shade and high humidity
+Cashewnut,25.0,50.0,25.0,50.0,25.0,50.0,5.0,6.5,1000.0,2000.0,20.0,35.0,50.0,70.0,Lateritic/Sandy loam,Drought-tolerant
+Castor Seed,40.0,60.0,30.0,40.0,20.0,40.0,6.0,7.5,500.0,750.0,20.0,30.0,40.0,60.0,Loamy,Prefers dry climate
+Coriander,25.0,30.0,40.0,50.0,20.0,30.0,6.0,8.0,400.0,700.0,20.0,30.0,40.0,60.0,Loam,Suitable for dry rabi season
+Cotton(Lint),90.0,120.0,45.0,60.0,60.0,90.0,6.0,8.0,500.0,1000.0,20.0,35.0,50.0,70.0,Black soil,Requires good drainage
+Cowpea(Lobia),20.0,40.0,30.0,40.0,30.0,40.0,6.0,7.5,600.0,1000.0,25.0,35.0,50.0,60.0,Sandy loam,Can grow in poor soils
+Dry Chillies,50.0,60.0,30.0,40.0,30.0,40.0,6.0,7.5,500.0,1000.0,20.0,30.0,40.0,60.0,Loamy,Sensitive to frost
+Garlic,50.0,100.0,40.0,50.0,50.0,60.0,6.0,7.5,500.0,1000.0,15.0,25.0,40.0,60.0,Loamy,Prefers cool dry season
+Ginger,75.0,100.0,50.0,60.0,50.0,100.0,5.5,6.5,1500.0,2500.0,20.0,30.0,70.0,90.0,Loamy,Needs well-drained soil and rainfall
+Gram,20.0,30.0,40.0,50.0,20.0,30.0,5.5,7.0,400.0,700.0,20.0,30.0,40.0,60.0,Sandy loam,Rabi pulse crop
+Groundnut,20.0,30.0,40.0,50.0,40.0,60.0,6.0,7.5,500.0,1000.0,25.0,35.0,50.0,70.0,Sandy loam,Requires well-drained soil
+Horse-Gram,20.0,25.0,30.0,40.0,20.0,30.0,5.5,7.0,400.0,800.0,25.0,35.0,40.0,60.0,Loamy,Drought-tolerant pulse
+Jowar,60.0,80.0,30.0,40.0,30.0,40.0,6.0,7.5,400.0,750.0,25.0,35.0,40.0,60.0,Loamy,Suited for dryland farming
+Linseed,20.0,30.0,40.0,50.0,20.0,30.0,6.0,7.5,400.0,700.0,15.0,25.0,40.0,60.0,Loam,Cool dry climate required
+Maize,100.0,150.0,50.0,60.0,50.0,100.0,5.5,7.5,500.0,1000.0,18.0,27.0,50.0,70.0,Loamy,Moderate rainfall and warmth required
+Mesta,40.0,50.0,20.0,30.0,30.0,40.0,5.5,7.0,1000.0,1500.0,25.0,35.0,60.0,80.0,Alluvial,Prefers high rainfall areas
+Moong(Green Gram),20.0,30.0,40.0,50.0,20.0,30.0,6.0,7.5,600.0,1000.0,25.0,35.0,50.0,60.0,Loamy,Short duration crop
+Niger Seed,20.0,25.0,25.0,30.0,20.0,25.0,5.5,7.0,800.0,1000.0,20.0,30.0,50.0,70.0,Loamy,Suited to tribal areas
+Onion,100.0,120.0,50.0,60.0,50.0,100.0,6.0,7.5,600.0,1000.0,15.0,25.0,50.0,70.0,Loamy,Needs cool climate for bulb formation
+Other Rabi Pulses,20.0,30.0,40.0,50.0,20.0,30.0,5.5,7.0,400.0,800.0,15.0,25.0,40.0,60.0,Loamy,Cool and dry climate
+Other Kharif Pulses,20.0,30.0,40.0,50.0,20.0,30.0,5.5,7.5,600.0,1000.0,25.0,35.0,50.0,70.0,Loamy,Warm humid conditions
+Peas & Beans (Pulses),20.0,30.0,40.0,50.0,30.0,40.0,6.0,7.5,400.0,800.0,15.0,25.0,50.0,70.0,Loamy,Cool-season legume crop
+Potato,100.0,150.0,50.0,60.0,100.0,150.0,5.0,6.5,600.0,1200.0,15.0,25.0,60.0,80.0,Loamy,Requires cool weather
+Ragi,60.0,80.0,30.0,40.0,30.0,40.0,5.5,7.5,700.0,1200.0,25.0,35.0,50.0,70.0,Red loam,Drought-tolerant cereal
+Rapeseed &Mustard,50.0,60.0,40.0,50.0,30.0,40.0,6.0,7.5,400.0,800.0,15.0,25.0,40.0,60.0,Loamy,Rabi oilseed crop
+Rice,100.0,150.0,40.0,60.0,40.0,60.0,5.0,6.5,1000.0,2000.0,20.0,35.0,70.0,90.0,Clayey loam,Needs standing water
+Safflower,20.0,30.0,30.0,40.0,20.0,30.0,6.0,7.5,400.0,800.0,20.0,30.0,40.0,60.0,Loamy,Rabi oilseed crop
+Sannhamp,20.0,30.0,20.0,30.0,20.0,30.0,6.0,7.5,800.0,1000.0,25.0,35.0,50.0,70.0,Loamy,Used for green manure
+Sesamum,20.0,30.0,30.0,40.0,30.0,40.0,5.5,7.0,500.0,1000.0,25.0,35.0,50.0,70.0,Loamy,Sensitive to frost
+Small Millets,40.0,50.0,30.0,40.0,30.0,40.0,5.5,7.5,500.0,1000.0,25.0,35.0,40.0,70.0,Loamy,Can grow in marginal soils
+Soyabean,20.0,30.0,40.0,50.0,40.0,60.0,6.0,7.5,600.0,1000.0,20.0,30.0,50.0,70.0,Loamy,Warm humid climate preferred
+Sugarcane,150.0,250.0,60.0,80.0,120.0,200.0,6.0,8.0,1000.0,1500.0,20.0,35.0,60.0,80.0,Loamy,High water requirement
+Sunflower,60.0,80.0,40.0,50.0,40.0,60.0,6.0,7.5,500.0,800.0,20.0,30.0,40.0,60.0,Loamy,Rabi and Kharif season crop
+Sweet Potato,60.0,80.0,50.0,60.0,60.0,80.0,5.5,6.5,750.0,1500.0,20.0,30.0,60.0,80.0,Loamy,Tuber crop needing moisture
+Tapioca,50.0,100.0,50.0,60.0,50.0,100.0,5.5,7.0,1000.0,1500.0,20.0,35.0,70.0,90.0,Loamy,Needs warm humid conditions
+Tobacco,50.0,100.0,40.0,50.0,100.0,150.0,5.5,7.5,600.0,1000.0,20.0,30.0,50.0,70.0,Sandy loam,Requires light soil
+Turmeric,100.0,150.0,50.0,60.0,100.0,150.0,5.0,6.5,1000.0,2000.0,20.0,35.0,70.0,90.0,Loamy,High rainfall and shade needed
+Urad,20.0,30.0,40.0,50.0,20.0,30.0,6.0,7.5,600.0,1000.0,25.0,35.0,50.0,70.0,Loamy,Short-duration pulse crop
+Wheat,100.0,150.0,50.0,60.0,40.0,60.0,6.0,7.5,500.0,1000.0,15.0,25.0,40.0,60.0,Loamy,Cool dry climate required
